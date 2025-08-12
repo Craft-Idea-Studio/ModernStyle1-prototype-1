@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModernStyle | Women's Fashion</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkbrown: '#391c0e',
+                        deepbrown: '#521c10',
+                        rust: '#952c05',
+                        terracotta: '#f25218',
+                        lightcream: '#fceee5'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fcf9f7;
+            overflow-x: hidden;
+        }
+        
+        .hero-video {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(57,28,14,0.7) 0%, rgba(149,44,5,0.5) 100%);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .cart-item-enter {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        
+        .cart-item-enter-active {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 300ms ease;
+        }
+        
+        .cart-item-exit {
+            opacity: 1;
+        }
+        
+        .cart-item-exit-active {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 300ms ease;
+        }
+        
+        .hamburger {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger div {
+            width: 25px;
+            height: 2px;
+            background-color: #fceee5;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger.active div:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .hamburger.active div:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active div:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+        
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+        
+        .video-control {
+            transition: all 0.3s ease;
+        }
+        
+        .video-control:hover {
+            transform: scale(1.1);
+            background-color: rgba(252, 238, 229, 0.2);
+        }
+        
+        .btn-primary {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(252, 238, 229, 0.4), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .btn-primary:hover::after {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(149, 44, 5, 0.2);
+        }
+        
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #f25218;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .feature-card {
+            transition: all 0.4s ease;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        
+        .feature-card.animate {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .testimonial-card {
+            transition: all 0.5s ease;
+        }
+        
+        .newsletter-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(242, 82, 24, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="bg-darkbrown text-lightcream py-4 px-6 md:px-12 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-2xl md:text-3xl font-bold font-serif">ModernStyle</h1>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="#" class="hover:text-terracotta transition-colors">New Arrivals</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Collections</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Dresses</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Tops</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Accessories</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Sale</a>
+            </nav>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative cart-icon">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span class="cart-count">0</span>
+                </div>
+                <div class="hidden md:block">
+                    <i class="fas fa-search text-xl hover:text-terracotta cursor-pointer"></i>
+                </div>
+                <div class="hamburger md:hidden">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div class="mobile-menu md:hidden bg-deepbrown mt-4 rounded-lg">
+            <div class="py-4 px-6 flex flex-col space-y-4">
+                <a href="#" class="hover:text-terracotta transition-colors">New Arrivals</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Collections</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Dresses</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Tops</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Accessories</a>
+                <a href="#" class="hover:text-terracotta transition-colors">Sale</a>
+                <a href="#" class="hover:text-terracotta transition-colors flex items-center">
+                    <i class="fas fa-search mr-2"></i> Search
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Video -->
+    <section class="hero-video">
+        <div class="absolute inset-0">
+            <video autoplay muted loop class="w-full h-full object-cover">
+                <source src="SHOP-10.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-overlay"></div>
+        
+        <div class="relative h-full flex flex-col justify-center items-center text-center text-lightcream px-4">
+            <h2 class="text-4xl md:text-6xl font-serif font-bold mb-4">Summer Collection 2024</h2>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl">Elevate your style with our latest collection designed for the modern woman</p>
+            <button class="btn-primary bg-terracotta text-lightcream px-8 py-3 rounded-full font-bold text-lg">
+                Shop Now
+            </button>
+            
+            <div class="absolute bottom-8 flex space-x-4">
+                <div class="video-control w-12 h-12 rounded-full bg-lightcream bg-opacity-20 flex items-center justify-center cursor-pointer">
+                    <i class="fas fa-pause text-lightcream"></i>
+                </div>
+                <div class="video-control w-12 h-12 rounded-full bg-lightcream bg-opacity-20 flex items-center justify-center cursor-pointer">
+                    <i class="fas fa-arrow-left text-lightcream"></i>
+                </div>
+                <div class="video-control w-12 h-12 rounded-full bg-lightcream bg-opacity-20 flex items-center justify-center cursor-pointer">
+                    <i class="fas fa-arrow-right text-lightcream"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 px-4 md:px-12 bg-lightcream">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-center mb-4 text-deepbrown">Better Way to Ship Your Products</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Experience seamless shopping with our premium delivery services</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg text-center transform transition-all duration-700">
+                    <div class="w-16 h-16 bg-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shipping-fast text-2xl text-lightcream"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-rust">Fast Delivery</h3>
+                    <p class="text-gray-600">Get your orders delivered in 2-3 business days with our express shipping service.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg text-center transform transition-all duration-700 delay-150">
+                    <div class="w-16 h-16 bg-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-undo-alt text-2xl text-lightcream"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-rust">Easy Returns</h3>
+                    <p class="text-gray-600">Not satisfied? Return within 30 days for a full refund, no questions asked.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-8 rounded-xl shadow-lg text-center transform transition-all duration-700 delay-300">
+                    <div class="w-16 h-16 bg-terracotta rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-headset text-2xl text-lightcream"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-rust">24/7 Support</h3>
+                    <p class="text-gray-600">Our customer service team is always ready to assist you with any inquiries.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-16 px-4 md:px-12 bg-white">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold mb-2 text-deepbrown">Best Sellers</h2>
+                <p class="text-xl text-terracotta font-medium">NEW WOMEN'S CLOTHING SUMMER COLLECTION 2024</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-lightcream rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Summer Dress" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-terracotta text-lightcream px-3 py-1 rounded-full text-sm font-bold">NEW</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1 text-deepbrown">Floral Maxi Dress</h3>
+                        <p class="text-gray-600 mb-3">Elegant summer dress with floral pattern</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-rust">$89.99</span>
+                            <button class="add-to-cart bg-terracotta text-lightcream px-4 py-2 rounded-lg font-medium hover:bg-rust transition-colors" data-id="1" data-name="Floral Maxi Dress" data-price="89.99" data-image="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-lightcream rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Denim Jacket" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1 text-deepbrown">Classic Denim Jacket</h3>
+                        <p class="text-gray-600 mb-3">Perfect for cool summer evenings</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-rust">$75.50</span>
+                            <button class="add-to-cart bg-terracotta text-lightcream px-4 py-2 rounded-lg font-medium hover:bg-rust transition-colors" data-id="2" data-name="Classic Denim Jacket" data-price="75.50" data-image="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card bg-lightcream rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Linen Pants" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-rust text-lightcream px-3 py-1 rounded-full text-sm font-bold">SALE</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1 text-deepbrown">Linen Wide-leg Pants</h3>
+                        <p class="text-gray-600 mb-3">Comfortable and stylish for warm days</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-rust">$65.00</span>
+                            <button class="add-to-cart bg-terracotta text-lightcream px-4 py-2 rounded-lg font-medium hover:bg-rust transition-colors" data-id="3" data-name="Linen Wide-leg Pants" data-price="65.00" data-image="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card bg-lightcream rounded-xl overflow-hidden shadow-md transition-all duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1589310243389-96a5483213a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Silk Top" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1 text-deepbrown">Silk Satin Blouse</h3>
+                        <p class="text-gray-600 mb-3">Luxurious fabric for a premium look</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-rust">$59.99</span>
+                            <button class="add-to-cart bg-terracotta text-lightcream px-4 py-2 rounded-lg font-medium hover:bg-rust transition-colors" data-id="4" data-name="Silk Satin Blouse" data-price="59.99" data-image="https://images.unsplash.com/photo-1589310243389-96a5483213a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 px-4 md:px-12 bg-lightcream">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-center mb-12 text-deepbrown">Our Satisfied Customers</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Customer" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-deepbrown">Sarah Johnson</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"The quality of their dresses is exceptional. I've ordered multiple items and they always exceed my expectations. The shipping was incredibly fast too!"</p>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Customer" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-deepbrown">Emily Rodriguez</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"I absolutely love my new linen pants! They're so comfortable and perfect for summer. The fit is exactly as described. Will definitely shop here again."</p>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Customer" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-deepbrown">Maya Thompson</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Customer service was amazing when I needed to exchange a size. They made the process so easy and hassle-free. The quality of their clothes is outstanding."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 px-4 md:px-12 bg-terracotta">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4 text-lightcream">Subscribe to our Newsletter</h2>
+            <p class="text-xl text-lightcream mb-8">Stay updated with our latest collections and exclusive offers</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center">
+                <input type="email" placeholder="Your email address" class="newsletter-input px-6 py-4 rounded-l-lg sm:rounded-r-none rounded-r-lg sm:w-2/3 w-full mb-4 sm:mb-0 focus:ring-2 focus:ring-lightcream">
+                <button class="bg-darkbrown text-lightcream px-8 py-4 rounded-r-lg sm:rounded-l-none rounded-l-lg font-bold text-lg hover:bg-deepbrown transition-colors sm:w-auto w-full">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="fixed inset-0 z-50 hidden" id="cart-sidebar">
+        <div class="absolute inset-0 bg-black bg-opacity-50" id="cart-overlay"></div>
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-lightcream shadow-xl transform transition-transform">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-deepbrown">Your Cart</h3>
+                    <button id="close-cart" class="text-2xl text-rust hover:text-terracotta">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto mb-6" id="cart-items">
+                    <!-- Cart items will be added here dynamically -->
+                    <div class="text-center py-12 text-gray-500" id="empty-cart">
+                        <i class="fas fa-shopping-cart text-5xl mb-4"></i>
+                        <p class="text-xl">Your cart is empty</p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-600">Subtotal:</span>
+                        <span class="font-bold" id="cart-subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-600">Tax (10%):</span>
+                        <span class="font-bold" id="cart-tax">$0.00</span>
+                    </div>
+                    <div class="flex justify-between mb-4 text-lg">
+                        <span class="font-bold text-deepbrown">Total:</span>
+                        <span class="font-bold text-rust" id="cart-total">$0.00</span>
+                    </div>
+                    <button class="w-full bg-terracotta text-lightcream py-3 rounded-lg font-bold text-lg hover:bg-rust transition-colors">
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-darkbrown text-lightcream py-12 px-4 md:px-12">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">ModernStyle</h3>
+                <p class="text-gray-300">Elevating women's fashion with modern designs and sustainable practices since 2015.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-terracotta transition-colors">About Us</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition-colors">Collections</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition-colors">Shipping Policy</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition-colors">Return Policy</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Customer Service</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-terracotta transition-colors">Contact Us</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition-colors">FAQs</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition-colors">Size Guide</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition-colors">Track Order</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-4">Contact Info</h4>
+                <ul class="space-y-2">
+                    <li class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2 text-terracotta"></i>
+                        <span>123 Fashion St, New York, NY</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-phone mr-2 text-terracotta"></i>
+                        <span>(123) 456-7890</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-envelope mr-2 text-terracotta"></i>
+                        <span>info@modernstyle.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="container mx-auto mt-12 pt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>&copy; 2024 ModernStyle. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const cartIcon = document.querySelector('.cart-icon');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const closeCart = document.getElementById('close-cart');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const emptyCartMessage = document.getElementById('empty-cart');
+        const cartCount = document.querySelector('.cart-count');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const cartSubtotal = document.getElementById('cart-subtotal');
+        const cartTax = document.getElementById('cart-tax');
+        const cartTotal = document.getElementById('cart-total');
+        
+        // Cart data
+        let cart = [];
+        
+        // Mobile Menu Toggle
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        });
+        
+        // Cart Toggle
+        cartIcon.addEventListener('click', () => {
+            cartSidebar.classList.remove('hidden');
+            gsap.fromTo(cartSidebar, {x: '100%'}, {x: 0, duration: 0.3});
+        });
+        
+        // Close Cart
+        function closeCartSidebar() {
+            gsap.to(cartSidebar, {x: '100%', duration: 0.3, onComplete: () => {
+                cartSidebar.classList.add('hidden');
+            }});
+        }
+        
+        cartOverlay.addEventListener('click', closeCartSidebar);
+        closeCart.addEventListener('click', closeCartSidebar);
+        
+        // Add to Cart
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const price = parseFloat(button.getAttribute('data-price'));
+                const image = button.getAttribute('data-image');
+                
+                // Add item to cart or increase quantity
+                const existingItem = cart.find(item => item.id === id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id,
+                        name,
+                        price,
+                        image,
+                        quantity: 1
+                    });
+                }
+                
+                updateCart();
+                
+                // Animation feedback
+                const cartIconRect = cartIcon.getBoundingClientRect();
+                const buttonRect = button.getBoundingClientRect();
+                
+                const flyItem = document.createElement('div');
+                flyItem.classList.add('fly-item');
+                flyItem.style.position = 'fixed';
+                flyItem.style.left = `${buttonRect.left}px`;
+                flyItem.style.top = `${buttonRect.top}px`;
+                flyItem.style.width = '20px';
+                flyItem.style.height = '20px';
+                flyItem.style.backgroundImage = `url(${image})`;
+                flyItem.style.backgroundSize = 'cover';
+                flyItem.style.borderRadius = '50%';
+                flyItem.style.zIndex = '1000';
+                document.body.appendChild(flyItem);
+                
+                gsap.to(flyItem, {
+                    x: cartIconRect.left - buttonRect.left,
+                    y: cartIconRect.top - buttonRect.top,
+                    scale: 0.2,
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    onComplete: () => {
+                        document.body.removeChild(flyItem);
+                    }
+                });
+            });
+        });
+        
+        // Update cart display
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update cart items
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                cartItemsContainer.innerHTML = '';
+                cartItemsContainer.appendChild(emptyCartMessage);
+            } else {
+                emptyCartMessage.classList.add('hidden');
+                
+                let itemsHTML = '';
+                let subtotal = 0;
+                
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+                    
+                    itemsHTML += `
+                    <div class="cart-item border-b border-gray-200 pb-4 mb-4">
+                        <div class="flex items-center">
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                            <div class="ml-4 flex-1">
+                                <h4 class="font-bold text-deepbrown">${item.name}</h4>
+                                <p class="text-rust font-bold">$${item.price.toFixed(2)}</p>
+                                <div class="flex items-center mt-2">
+                                    <button class="decrease-quantity w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center" data-id="${item.id}">
+                                        <i class="fas fa-minus text-xs"></i>
+                                    </button>
+                                    <span class="quantity mx-3 font-medium">${item.quantity}</span>
+                                    <button class="increase-quantity w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center" data-id="${item.id}">
+                                        <i class="fas fa-plus text-xs"></i>
+                                    </button>
+                                    <button class="remove-item ml-4 text-terracotta hover:text-rust" data-id="${item.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                });
+                
+                cartItemsContainer.innerHTML = itemsHTML;
+                
+                // Add event listeners to cart buttons
+                document.querySelectorAll('.decrease-quantity').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const id = button.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        
+                        if (item.quantity > 1) {
+                            item.quantity -= 1;
+                        } else {
+                            cart = cart.filter(item => item.id !== id);
+                        }
+                        
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.increase-quantity').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const id = button.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        item.quantity += 1;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const id = button.getAttribute('data-id');
+                        cart = cart.filter(item => item.id !== id);
+                        updateCart();
+                    });
+                });
+            }
+            
+            // Calculate and update totals
+            const tax = subtotal * 0.1;
+            const total = subtotal + tax;
+            
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            cartTax.textContent = `$${tax.toFixed(2)}`;
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+        }
+        
+        // Video controls
+        const video = document.querySelector('video');
+        const pauseBtn = document.querySelector('.video-control:nth-child(1)');
+        const prevBtn = document.querySelector('.video-control:nth-child(2)');
+        const nextBtn = document.querySelector('.video-control:nth-child(3)');
+        
+        pauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                pauseBtn.innerHTML = '<i class="fas fa-pause text-lightcream"></i>';
+            } else {
+                video.pause();
+                pauseBtn.innerHTML = '<i class="fas fa-play text-lightcream"></i>';
+            }
+        });
+        
+        // GSAP Animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate hero text
+            gsap.from('.hero-video h2', {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: 0.5
+            });
+            
+            gsap.from('.hero-video p', {
+                y: 30,
+                opacity: 0,
+                duration: 1,
+                delay: 0.8
+            });
+            
+            gsap.from('.btn-primary', {
+                scale: 0,
+                opacity: 0,
+                duration: 0.8,
+                delay: 1.2,
+                ease: 'back.out(1.7)'
+            });
+            
+            // Animate feature cards on scroll
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            featureCards.forEach((card, index) => {
+                gsap.to(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    delay: index * 0.2,
+                    ease: 'power2.out'
+                });
+            });
+            
+            // Animate product cards on scroll
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach((card, index) => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 90%',
+                        toggleActions: 'play none none none'
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.6,
+                    delay: index * 0.15,
+                    ease: 'power2.out'
+                });
+            });
+            
+            // Animate testimonials
+            const testimonials = document.querySelectorAll('.testimonial-card');
+            
+            testimonials.forEach((testimonial, index) => {
+                gsap.from(testimonial, {
+                    scrollTrigger: {
+                        trigger: testimonial,
+                        start: 'top 90%',
+                        toggleActions: 'play none none none'
+                    },
+                    x: index % 2 === 0 ? -50 : 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: index * 0.2,
+                    ease: 'power2.out'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
